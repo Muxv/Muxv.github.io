@@ -88,7 +88,9 @@
 <meta property="og:description" content="组内这周主题是强化学习(Reinforcement Learning 下简称 RL)，决定一周入门RL">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/09/16/Start-From-Reinforcement-Learning/easy%20Simple.png">
-<meta property="og:updated_time" content="2018-09-16T15:34:27.169Z">
+<meta property="og:image" content="http://yoursite.com/2018/09/16/Start-From-Reinforcement-Learning/k-armed%20bandit.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/16/Start-From-Reinforcement-Learning/epsilon-greedy.png">
+<meta property="og:updated_time" content="2018-09-17T05:18:08.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Start From Reinforcement Learning">
 <meta name="twitter:description" content="组内这周主题是强化学习(Reinforcement Learning 下简称 RL)，决定一周入门RL">
@@ -324,7 +326,7 @@
       
         <p>组内这周主题是强化学习(Reinforcement Learning 下简称 RL)，决定一周入门RL</p>
 <a id="more"></a>
-<h2 id="Day-1-从瓜书开始"><a href="#Day-1-从瓜书开始" class="headerlink" title="Day 1 从瓜书开始"></a>Day 1 从瓜书开始</h2><blockquote>
+<h2 id="Step-1-从瓜书开始"><a href="#Step-1-从瓜书开始" class="headerlink" title="Step 1 从瓜书开始"></a>Step 1 从瓜书开始</h2><blockquote>
 <p> <img src="/2018/09/16/Start-From-Reinforcement-Learning/easy Simple.png" alt="简单例子"></p>
 <p>瓜书 P 371</p>
 </blockquote>
@@ -337,7 +339,7 @@
 <li>$R(reward)$：奖赏，即状态变化的时候反馈给机器的信息，可正可负</li>
 </ul>
 </li>
-<li>综上所述，一个强化学习对应了一个四元组 $E = &lt;X,A,P,R&gt;$ </li>
+<li>综上所述，一个强化学习对应了一个四元组 $E = <x,a,p,r>$ </x,a,p,r></li>
 <li>我们学习的目的是通过不断地尝试学的一个策略 $\pi (policy)$ ，根据策略有 $a = \pi (x)$ <ul>
 <li>策略有两种表示：确定性策略：$\pi : X {\rightarrow} A $  ，另一种是随机性策略$\pi : X\times A \rightarrow \mathbb R $ ，$\pi(s,a)$代表状态 $s$ 下 选择 $a $ 的概率，自然有 $\sum_a \pi(s, a) = 1$ </li>
 <li>我们用执行策略后的得到的<strong>累计奖赏</strong>来评估策略的优劣。学习的目的就是找到使长期累积最大化的策略。</li>
@@ -347,8 +349,7 @@
 <hr>
 <ul>
 <li><p>和监督学习相比，强化学习的一个最大的特征就是最终奖赏<strong>有延时性</strong>，可以把强化学习看作具有”延迟标记信息“的监督学习问题。我们不妨先从一个简单的情形开始讨论：<strong>最大化单步奖赏</strong>（这和我们的现实情况还是有很大差别的）</p>
-<center><bold>如何最大化单步奖赏？</bold></center>
-
+<p><center><bold>如何最大化单步奖赏？</bold></center><br><img src="/2018/09/16/Start-From-Reinforcement-Learning/k-armed bandit.png" alt="k-摇臂赌博机"></p>
 <ul>
 <li>知道每个动作带来的奖赏</li>
 <li>执行奖赏最大的动作<ul>
@@ -356,13 +357,34 @@
 <li>更普遍的情况是奖赏来自于一个概率分布，一次尝试不能确切地获得平均奖赏</li>
 </ul>
 </li>
-<li>我们用<em>”K-摇臂赌博机“</em>来对应这种问题：<ul>
+<li>我们用<em>”K-摇臂赌博机“</em>来对应这种问题：”如图所示，赌徒投入一个硬币后，选择一个摇杆，每个摇杆有一定的概率吐出硬币，这个概率赌徒并不知道。赌徒的目标就是通过找到一个策略来使自己在等量成本下，收益最大”。</li>
+<li>我们可以先考虑两种极端的思路：<ul>
+<li><em>Exploration-only（仅探索）</em>：把所有的尝试机会平均分给每个摇臂（轮流按下每个摇臂），最后将得到的平均概率作为奖赏期望的近似估计。这样虽然能获得每个摇臂近似的奖赏，但是做不到收益最大。</li>
+<li><em>Exploitation-only (仅利用)</em> ： 只按目前最优的摇臂（目前为止平均奖赏最大的）。这样无法判断每个摇臂的奖赏，当前最优很可能和全局最优不同，也不能保证收益最大。</li>
+<li>Exploration vs Exploitation ：显然，在尝试次数有限的情况下，双方是相互矛盾的(即探索-利用窘境：Exploration -Exploitation dilemma)。想要奖赏最大，必须有所折中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>于是我们引入：$\epsilon$ - greedy （$\epsilon$-贪心）是一种基于概率折中两者的算法： </p>
+<ul>
+<li><p>基本思路：每次尝试时，以 $\epsilon$ 的概率进行探索，以均匀概率随机选取一个摇臂，以 $1-\epsilon$ 的概率进行利用，即选择当前<strong>平均奖赏</strong>最高的摇臂</p>
+<ul>
+<li><p>关于如何记录<strong>平均奖赏</strong>，最简单的是记录每个摇臂获得的奖赏取平均，但是需要记录若干个奖赏值，对计算空间有一定要求。于是我们采取增量式来记录平均奖赏：</p>
+<script type="math/tex; mode=display">Q_n(k) = \frac{1}{n}((n-1)\times Q_{n-1}(k) + v_n)</script></li>
+<li><p>（其中 $Q_n(k)$ 为摇臂k的n次尝试后的平均奖赏，$v_n$为第n次获得的奖赏) ，此后只需要记录 $Q_n(k) $ 和  $v_n$ 的值。</p>
+</li>
+</ul>
+</li>
+<li><p>引入算法</p>
+<p><img src="/2018/09/16/Start-From-Reinforcement-Learning/epsilon-greedy.png" alt="epsilon-greedy"></p>
+</li>
 <li></li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
+<p>​        </p>
+<p>​        </p>
 
       
     </div>
@@ -543,7 +565,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Day-1-从瓜书开始"><span class="nav-number">1.</span> <span class="nav-text">Day 1 从瓜书开始</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-1-从瓜书开始"><span class="nav-number">1.</span> <span class="nav-text">Step 1 从瓜书开始</span></a></li></ol></div>
             
 
           </div>
