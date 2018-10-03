@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API版本是 0.9.0">
+<meta name="description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn 这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API 版本是 0.9.0">
 <meta name="keywords" content="Visualization">
 <meta property="og:type" content="article">
 <meta property="og:title" content="玩SeaBorn(1)">
 <meta property="og:url" content="http://yoursite.com/2018/10/02/Try with SeaBorn/index.html">
 <meta property="og:site_name" content="Muxv&#39;s Plog">
-<meta property="og:description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API版本是 0.9.0">
+<meta property="og:description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn 这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API 版本是 0.9.0">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_5_1.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_9_1.png">
@@ -98,10 +98,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_25_0.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_27_1.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_29_0.png">
-<meta property="og:updated_time" content="2018-10-03T09:43:04.678Z">
+<meta property="og:updated_time" content="2018-10-03T10:15:41.282Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="玩SeaBorn(1)">
-<meta name="twitter:description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API版本是 0.9.0">
+<meta name="twitter:description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn 这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API 版本是 0.9.0">
 <meta name="twitter:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_5_1.png">
 
 
@@ -354,31 +354,28 @@
       
 
       
-        <p>今天我们来接触一下一个基于matplotlib的可视化python库：seaborn<br>这里是官方的地址~<a href="http://seaborn.pydata.org/" target="_blank" rel="noopener">seaborn’s home</a> 这里是API  <a href="http://seaborn.pydata.org/api.html" target="_blank" rel="noopener">Seaborn’s API</a><br>版本是 0.9.0</p>
+        <p>今天我们来接触一下一个基于matplotlib的可视化python库：seaborn
+这里是官方的地址~<a href="http://seaborn.pydata.org/" target="_blank" rel="noopener">seaborn’s home</a> 这里是API  <a href="http://seaborn.pydata.org/api.html" target="_blank" rel="noopener">Seaborn’s API</a>
+版本是 0.9.0</p>
 <a id="more"></a>
 <h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><ul>
-<li>通过conda安装:<br><code>conda install seaborn</code></li>
+<li>通过conda安装: 
+<code>conda install seaborn</code></li>
 <li>为了交互式的运行，本篇博客将在Jupyter notebook 内实现。</li>
 </ul>
 <h2 id="Let’s-Start"><a href="#Let’s-Start" class="headerlink" title="Let’s Start"></a>Let’s Start</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line">sns.set()  <span class="comment"># 通过设置里面的参数可以修改图片的风格</span></span><br><span class="line">tips = sns.load_dataset(<span class="string">"tips"</span>, cache=<span class="keyword">False</span>) </span><br><span class="line"><span class="comment"># load_dataset 从https://raw.githubusercontent.com/mwaskom/seaborn-data/master下载csv</span></span><br><span class="line"><span class="comment"># cache默认为True，会将文件下载到参数data_home所指的地址</span></span><br><span class="line"><span class="comment"># 当cache为True时，若保存的地址有中文，很有可能出现pandas.read_csv的OSError</span></span><br><span class="line">tips.head() <span class="comment"># 展示前五行数据</span></span><br></pre></td></tr></table></figure>
-<hr>
-<div>
-<style scoped>
+<div> <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
-
     .dataframe tbody tr th {
         vertical-align: top;
     }
-
     .dataframe thead th {
         text-align: right;
     }
 </style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
+<table border="1" class="dataframe"><thead><tr style="text-align: right;">
       <th></th>
       <th>total_bill</th>
       <th>tip</th>
@@ -439,12 +436,7 @@
       <td>Sun</td>
       <td>Dinner</td>
       <td>4</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
+    </tr></tbody></table></div>
 
 <p>此数据集显示了不同人在不同情况下用餐之后给与小费的数量 </p>
 <p>可以看到前五行数据如上，下面我们尝试用seaborn画图</p>
@@ -464,7 +456,9 @@
 </li>
 </ul>
 <hr>
-<p>我们第一个要讨论的函数为:<br><code>sns.relplot()</code><br>这是一个Figure_level function，是FacetGird包含了<code>sns.scatterplot</code>和<code>sns.lineplot()</code>的产物，通过设置默认参数<code>king=&quot;scatter&quot;</code> or <code>&quot;line&quot;</code>可以修改散点图 or 直线图。</p>
+<p>我们第一个要讨论的函数为:
+<code>sns.relplot()</code>
+这是一个Figure_level function，是FacetGird包含了sns.scatterplot()和sns.lineplot()的产物，通过设置默认参数king=”scatte” or “line”可以修改散点图 or 直线图。</p>
 <p>我们从下面的语句开始</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment"># 之前已经有import seaborn</span></span><br><span class="line">sns.set(style=<span class="string">"darkgrid"</span>) <span class="comment"># 设置 axes_style为darkgrid</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, data=tips)</span><br><span class="line"><span class="comment"># 读者可以尝试令参数 kind="line" 会出现"神奇"的效果</span></span><br></pre></td></tr></table></figure>
@@ -474,14 +468,14 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, hue=<span class="string">"smoker"</span>, data=tips)</span><br></pre></td></tr></table></figure>
 <p><img src="/2018/10/02/Try with SeaBorn/output_11_1.png" alt="png"></p>
 <ul>
-<li><p>这次我们使用了一个参数<code>hue=&quot;smoker&quot;</code>，<code>hue</code>这个参数提供了给图中不同种类的点着色的功能。可以看出，这个参数获得的是data中某一列header的名字(此处我们传入的是data中的”smoker”一列)。有趣的是，传入的除了二元特征也可以是多元特征，甚至可以是连续值特征。传入的是连续值时，颜色会呈现渐变变化</p>
+<li><p>这次我们使用了一个参数hue=”smoker”，hue这个参数提供了给图中不同种类的点着色的功能。可以看出，这个参数获得的是data中某一列header的名字(此处我们传入的是data中的”smoker”一列)。有趣的是，传入的除了二元特征也可以是多元特征，甚至可以是连续值特征。传入的是连续值时，颜色会呈现渐变变化</p>
 </li>
 <li><p>可以尝试下面的语句</p>
 </li>
 </ul>
 <p><code>sns.relplot(x=&quot;total_bill&quot;, y=&quot;tip&quot;, hue=&quot;size&quot;, data=tips)</code></p>
 <ul>
-<li>另外再通过给参数<code>palette</code>传值可以修改点颜色，具体使用时可以参考api。另外也可以在<code>sns.set()</code>内传参修改点的颜色</li>
+<li>另外再通过给参数palette传值可以修改点颜色，具体使用时可以参考api。另外也可以在sns.set()内传参修改点的颜色</li>
 </ul>
 <p>然后我们尝试传入style参数：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, hue=<span class="string">"smoker"</span>, style=<span class="string">"smoker"</span>,data=tips)</span><br></pre></td></tr></table></figure>
@@ -491,29 +485,33 @@
 <li>同样的，style参数也可以传入连续值特征，不过绝大多数情况下不会用到</li>
 </ul>
 <p>但是对于smoker特征来说，颜色已经足够区分，我们不妨用style来区分另一个特征 “time”</p>
-<p>可以尝试：<code>sns.relplot(x=&quot;total_bill&quot;, y=&quot;tip&quot;, hue=&quot;smoker&quot;, style=&quot;time&quot;,data=tips)</code></p>
+<p>可以尝试：
+<code>sns.relplot(x=&quot;total_bill&quot;, y=&quot;tip&quot;, hue=&quot;smoker&quot;, style=&quot;time&quot;,data=tips)</code></p>
 <ul>
-<li>这样我们的图片中的点已经可以展示很大的信息量了，不过seaborn还不止于此，我们还可以通过传入<code>size</code>参数的值改变点的大小：</li>
+<li>这样我们的图片中的点已经可以展示很大的信息量了，不过seaborn还不止于此，我们还可以通过传入size参数的值改变点的大小：</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, hue=<span class="string">"smoker"</span>, style=<span class="string">"time"</span>, size=<span class="string">"size"</span>, data=tips)</span><br></pre></td></tr></table></figure>
 <p><img src="/2018/10/02/Try with SeaBorn/output_16_1.png" alt="png"></p>
 <ul>
-<li><code>size</code>参数的使用和上面提及的其他参数是基本一致的</li>
-<li>此外，通过给另一个参数<code>sizes</code>传值可以修改点大小的分布，传入的可以是dict/list/tuple，传入dict时要求dict内对每种size的值进行mapping，即dict={(sizeValue, size)…..}，而使用list/tuple则需要指定点最大最小值</li>
+<li>size参数的使用和上面提及的其他参数是基本一致的</li>
+<li>此外，通过给另一个参数sizes传值可以修改点大小的分布，传入的可以是dict/list/tuple，传入dict时要求dict内对每种size的值进行mapping，即dict={(sizeValue, size)…..}，而使用list/tuple则需要指定点最大最小值</li>
 </ul>
-<p>可以尝试 <code>sns.relplot(x=&quot;total_bill&quot;, y=&quot;tip&quot;, size=&quot;size&quot;, sizes=(15, 200), data=tips)</code></p>
-<p>下面使用<code>col</code>,<code>row</code>参数：</p>
+<p>可以尝试
+<code>sns.relplot(x=&quot;total_bill&quot;, y=&quot;tip&quot;, size=&quot;size&quot;, sizes=(15, 200), data=tips)</code></p>
+<p>下面使用col,row参数：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, hue=<span class="string">"smoker"</span>, col=<span class="string">"time"</span>, size=<span class="string">"size"</span>, data=tips)</span><br></pre></td></tr></table></figure>
 <p><img src="/2018/10/02/Try with SeaBorn/output_18_1.png" alt="png"></p>
 <ul>
-<li>很容易可以看出，令<code>col = &quot;time&quot;</code>时，会根据”time”值的不同在其他列生成图片。令<code>row = &quot;timw&quot;</code>,则会在不同行生成图片</li>
+<li>很容易可以看出，令col = “time”时，会根据”time”值的不同在其他列生成图片。令row = “time”,则会在不同行生成图片</li>
 </ul>
-<h2 id="用relplot分析连线图"><a href="#用relplot分析连线图" class="headerlink" title="用relplot分析连线图"></a>用relplot分析连线图</h2><p>当我们要仔细的研究数据的变化情况时，连线图就比散点图更加方便</p>
-<p>当然我们可以直接用sns.lineplot()绘制，不过我们依然延续上面的内容，用<code>sns.relplot(kind=&quot;line&quot;.....)</code> 来绘制连线图</p>
+<h2 id="用-relplot-分析连线图"><a href="#用-relplot-分析连线图" class="headerlink" title="用 relplot 分析连线图"></a>用 relplot 分析连线图</h2><p>当我们要仔细的研究数据的变化情况时，连线图就比散点图更加方便</p>
+<p>当然我们可以直接用sns.lineplot()绘制，不过我们依然延续上面的内容，用</p>
+<p><code>sns.relplot(kind=&quot;line&quot;.....)</code> </p>
+<p>来绘制连线图</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(dict(time=np.arange(<span class="number">500</span>),</span><br><span class="line">                       value=np.random.randn(<span class="number">500</span>).cumsum()))</span><br><span class="line"><span class="comment"># np.cumsum(Array)返回一个和Array同shape的np.darray</span></span><br><span class="line"><span class="comment">#其中第n个元素为Array的前n项和</span></span><br><span class="line">g = sns.relplot(x=<span class="string">"time"</span>, y=<span class="string">"value"</span>, kind=<span class="string">"line"</span>, data=df)</span><br><span class="line">g.fig.autofmt_xdate() <span class="comment"># x轴数值斜体化</span></span><br></pre></td></tr></table></figure>
 <p><img src="/2018/10/02/Try with SeaBorn/output_21_0.png" alt="png"></p>
 <ul>
-<li>我们随机生成了一个dataFrame，横轴为1-500的整数，纵轴为生成随机数的前time项和。值得注意的是，seaborn在处理数据时，会有序的将(x, y)数据对根据 <em>x的大小</em> 进行排列，即默认参数<code>sort=True</code>，如果我们不需要这样的功能，可以置参数为<code>False</code> </li>
+<li>我们随机生成了一个dataFrame，横轴为1-500的整数，纵轴为生成随机数的前time项和。值得注意的是，seaborn在处理数据时，会有序的将(x, y)数据对根据 <em>x的大小</em> 进行排列，即默认参数<code>sort=True</code>，如果我们不需要这样的功能，可以置参数为False</li>
 </ul>
 <p>可以尝试下面的代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(np.random.randn(500, 2).cumsum(axis=0), columns=[&quot;x&quot;, &quot;y&quot;])</span><br><span class="line">sns.relplot(x=&quot;x&quot;, y=&quot;y&quot;, sort=False, kind=&quot;line&quot;, data=df)</span><br></pre></td></tr></table></figure>
@@ -522,24 +520,26 @@
 <p><img src="/2018/10/02/Try with SeaBorn/output_23_1.png" alt="png"></p>
 <ul>
 <li>可以看出，seaborn将y值的平均值标记了出来，并且绘制出了95%的置信区间。</li>
-<li>若要去去除置信区间的显示，可以令<code>ci=None</code>(ci-&gt;confidence intervals)</li>
+<li>若要去去除置信区间的显示，可以令ci=None(ci-&gt;confidence intervals)</li>
 </ul>
 <p><code>sns.relplot(x=&quot;timepoint&quot;, y=&quot;signal&quot;, ci=None, kind=&quot;line&quot;, data=fmri)</code></p>
 <ul>
 <li><p>不同的ci参数的设置可以有不同的效果，具体情况可以查看api</p>
 </li>
-<li><p>如果不需要计算mean值，可以令<code>estimator=None</code>，不过会有奇怪的效果</p>
+<li><p>如果不需要计算mean值，可以令estimator=None，不过会有奇怪的效果</p>
 </li>
 </ul>
 <hr>
-<p>和散点图一样，我们也可以通过传入hue,style等等参数来在一张图中显示多维度的数据<br>例如下面的语句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"timepoint"</span>, y=<span class="string">"signal"</span>, hue=<span class="string">"region"</span>, style=<span class="string">"event"</span>,</span><br><span class="line">            markers=<span class="keyword">True</span>, kind=<span class="string">"line"</span>, data=fmri);</span><br></pre></td></tr></table></figure>
+<p>和散点图一样，我们也可以通过传入hue,style等等参数来在一张图中显示多维度的数据
+例如下面的语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"timepoint"</span>, y=<span class="string">"signal"</span>, hue=<span class="string">"region"</span>, style=<span class="string">"event"</span>,markers=<span class="keyword">True</span>, kind=<span class="string">"line"</span>, data=fmri);</span><br></pre></td></tr></table></figure>
 <p><img src="/2018/10/02/Try with SeaBorn/output_25_0.png" alt="png"></p>
 <ul>
 <li>类似的，hue参数改变颜色，style改变线的虚实(若dashes=False,则不会有虚实线的区别)，markers会给图中的点标出</li>
-<li><p>对于连线图而言，将hue与style所指的特征列设置为相同的能使图像看起来更加明晰<br><code>sns.relplot(x=&quot;timepoint&quot;, y=&quot;signal&quot;, hue=&quot;event&quot;, style=&quot;event&quot;,kind=&quot;line&quot;, data=fmri)</code></p>
+<li><p>对于连线图而言，将hue与style所指的特征列设置为相同的能使图像看起来更加明晰
+<code>sns.relplot(x=&quot;timepoint&quot;, y=&quot;signal&quot;, hue=&quot;event&quot;,style=&quot;event&quot;,kind=&quot;line&quot;, data=fmri)</code></p>
 </li>
-<li><p>接下来我们介绍一下<code>units</code>这个参数，通过设定它可以在一张图内画出多条直线：令<code>units=&quot;subject&quot;</code>可以根据subject属性的不同画出不同的曲线，即根据subject的值进行取样</p>
+<li><p>接下来我们介绍一下units这个参数，通过设定它可以在一张图内画出多条直线：令units=”subject”可以根据subject属性的不同画出不同的曲线，即根据subject的值进行取样</p>
 </li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"timepoint"</span>, y=<span class="string">"signal"</span>, hue=<span class="string">"region"</span>,</span><br><span class="line">            units=<span class="string">"subject"</span>, estimator=<span class="keyword">None</span>,</span><br><span class="line">            kind=<span class="string">"line"</span>, data=fmri.query(<span class="string">"event == 'stim'"</span>))</span><br><span class="line"><span class="comment"># pd.query("event == 'stim'")为pd中event属性为'stim'的部分</span></span><br></pre></td></tr></table></figure>
@@ -724,7 +724,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题外话"><span class="nav-number">1.</span> <span class="nav-text">题外话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Let’s-Start"><span class="nav-number">2.</span> <span class="nav-text">Let’s Start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用sns-relplot分析散点图"><span class="nav-number">3.</span> <span class="nav-text">用sns.relplot分析散点图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用relplot分析连线图"><span class="nav-number">4.</span> <span class="nav-text">用relplot分析连线图</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题外话"><span class="nav-number">1.</span> <span class="nav-text">题外话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Let’s-Start"><span class="nav-number">2.</span> <span class="nav-text">Let’s Start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用sns-relplot分析散点图"><span class="nav-number">3.</span> <span class="nav-text">用sns.relplot分析散点图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用-relplot-分析连线图"><span class="nav-number">4.</span> <span class="nav-text">用 relplot 分析连线图</span></a></li></ol></div>
             
 
           </div>
