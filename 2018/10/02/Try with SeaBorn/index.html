@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Visualization," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API版本是 0.9.0">
+<meta name="keywords" content="Visualization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="玩SeaBorn(1)">
+<meta property="og:url" content="http://yoursite.com/2018/10/02/Try with SeaBorn/index.html">
+<meta property="og:site_name" content="Muxv&#39;s Plog">
+<meta property="og:description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API版本是 0.9.0">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_5_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_9_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_11_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_13_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_16_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_18_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_21_0.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_23_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_25_0.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_27_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_29_0.png">
+<meta property="og:updated_time" content="2018-10-03T09:43:04.678Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="玩SeaBorn(1)">
+<meta name="twitter:description" content="今天我们来接触一下一个基于matplotlib的可视化python库：seaborn这里是官方的地址~seaborn’s home 这里是API  Seaborn’s API版本是 0.9.0">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/02/Try%20with%20SeaBorn/output_5_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/02/Try with SeaBorn/"/>
+
+
+
+
+
+  <title>玩SeaBorn(1) | Muxv's Plog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muxv's Plog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-list"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/Try with SeaBorn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muxv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muxv's Plog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">玩SeaBorn(1)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-02T18:11:40+08:00">
+                2018-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/有趣的东西/" itemprop="url" rel="index">
+                    <span itemprop="name">有趣的东西</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天我们来接触一下一个基于matplotlib的可视化python库：seaborn<br>这里是官方的地址~<a href="http://seaborn.pydata.org/" target="_blank" rel="noopener">seaborn’s home</a> 这里是API  <a href="http://seaborn.pydata.org/api.html" target="_blank" rel="noopener">Seaborn’s API</a><br>版本是 0.9.0</p>
+<a id="more"></a>
+<h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><ul>
+<li>通过conda安装:<br><code>conda install seaborn</code></li>
+<li>为了交互式的运行，本篇博客将在Jupyter notebook 内实现。</li>
+</ul>
+<h2 id="Let’s-Start"><a href="#Let’s-Start" class="headerlink" title="Let’s Start"></a>Let’s Start</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line">sns.set()  <span class="comment"># 通过设置里面的参数可以修改图片的风格</span></span><br><span class="line">tips = sns.load_dataset(<span class="string">"tips"</span>, cache=<span class="keyword">False</span>) </span><br><span class="line"><span class="comment"># load_dataset 从https://raw.githubusercontent.com/mwaskom/seaborn-data/master下载csv</span></span><br><span class="line"><span class="comment"># cache默认为True，会将文件下载到参数data_home所指的地址</span></span><br><span class="line"><span class="comment"># 当cache为True时，若保存的地址有中文，很有可能出现pandas.read_csv的OSError</span></span><br><span class="line">tips.head() <span class="comment"># 展示前五行数据</span></span><br></pre></td></tr></table></figure>
+<hr>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>sex</th>
+      <th>smoker</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>16.99</td>
+      <td>1.01</td>
+      <td>Female</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10.34</td>
+      <td>1.66</td>
+      <td>Male</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>21.01</td>
+      <td>3.50</td>
+      <td>Male</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>23.68</td>
+      <td>3.31</td>
+      <td>Male</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>24.59</td>
+      <td>3.61</td>
+      <td>Female</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<p>此数据集显示了不同人在不同情况下用餐之后给与小费的数量 </p>
+<p>可以看到前五行数据如上，下面我们尝试用seaborn画图</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>,col=<span class="string">"time"</span>,hue=<span class="string">"smoker"</span>,style=<span class="string">"smoker"</span>,size=<span class="string">"size"</span>,data=tips)</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_5_1.png" alt="png"></p>
+<p>这只是我们一个简单的探索，下面我们从最简单的函数开始</p>
+<h2 id="用sns-relplot分析散点图"><a href="#用sns-relplot分析散点图" class="headerlink" title="用sns.relplot分析散点图"></a>用sns.relplot分析散点图</h2><p>当我们处理数据的时候，往往要分析不同数据之间的关系，即数据之间是如何相互关联的。而可视化就是一个能极大方便人分析数据的过程，通过可视化我们可以轻而易举的看出数据之间的隐含关系</p>
+<p>在开始之前，我们先介绍两种函数：</p>
+<ul>
+<li><em>Figure-level function</em><ul>
+<li>返回值类型是 seaborn.FacetGrid，个人理解是包含多个ax轴的图，即包含多个axes-level function的图，可以在一张图内展示多个特征之间的关系</li>
+</ul>
+</li>
+<li><em>axes-level function</em><ul>
+<li>返回值为ax,个人理解是包含一对特征关系的图，是构建Figure-level function的成员</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>我们第一个要讨论的函数为:<br><code>sns.relplot()</code><br>这是一个Figure_level function，是FacetGird包含了<code>sns.scatterplot</code>和<code>sns.lineplot()</code>的产物，通过设置默认参数<code>king=&quot;scatter&quot;</code> or <code>&quot;line&quot;</code>可以修改散点图 or 直线图。</p>
+<p>我们从下面的语句开始</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment"># 之前已经有import seaborn</span></span><br><span class="line">sns.set(style=<span class="string">"darkgrid"</span>) <span class="comment"># 设置 axes_style为darkgrid</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, data=tips)</span><br><span class="line"><span class="comment"># 读者可以尝试令参数 kind="line" 会出现"神奇"的效果</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_9_1.png" alt="png"></p>
+<p>上面的例子我们将tips中的点用2个维度进行了绘图，这看起来不错。</p>
+<p>不过，这样并不能满足进一步的数据分析的需求，我们seaborn优秀的绘图能力还没有完全展现，让我们来尝试下面的语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, hue=<span class="string">"smoker"</span>, data=tips)</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_11_1.png" alt="png"></p>
+<ul>
+<li><p>这次我们使用了一个参数<code>hue=&quot;smoker&quot;</code>，<code>hue</code>这个参数提供了给图中不同种类的点着色的功能。可以看出，这个参数获得的是data中某一列header的名字(此处我们传入的是data中的”smoker”一列)。有趣的是，传入的除了二元特征也可以是多元特征，甚至可以是连续值特征。传入的是连续值时，颜色会呈现渐变变化</p>
+</li>
+<li><p>可以尝试下面的语句</p>
+</li>
+</ul>
+<p><code>sns.relplot(x=&quot;total_bill&quot;, y=&quot;tip&quot;, hue=&quot;size&quot;, data=tips)</code></p>
+<ul>
+<li>另外再通过给参数<code>palette</code>传值可以修改点颜色，具体使用时可以参考api。另外也可以在<code>sns.set()</code>内传参修改点的颜色</li>
+</ul>
+<p>然后我们尝试传入style参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, hue=<span class="string">"smoker"</span>, style=<span class="string">"smoker"</span>,data=tips)</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_13_1.png" alt="png"></p>
+<ul>
+<li>style参数影响了图中点的样式，传入参数依然为data中数据的名字，如上图所示，smoker为Yes的点是圆形点，而No的值则是叉点</li>
+<li>同样的，style参数也可以传入连续值特征，不过绝大多数情况下不会用到</li>
+</ul>
+<p>但是对于smoker特征来说，颜色已经足够区分，我们不妨用style来区分另一个特征 “time”</p>
+<p>可以尝试：<code>sns.relplot(x=&quot;total_bill&quot;, y=&quot;tip&quot;, hue=&quot;smoker&quot;, style=&quot;time&quot;,data=tips)</code></p>
+<ul>
+<li>这样我们的图片中的点已经可以展示很大的信息量了，不过seaborn还不止于此，我们还可以通过传入<code>size</code>参数的值改变点的大小：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, hue=<span class="string">"smoker"</span>, style=<span class="string">"time"</span>, size=<span class="string">"size"</span>, data=tips)</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_16_1.png" alt="png"></p>
+<ul>
+<li><code>size</code>参数的使用和上面提及的其他参数是基本一致的</li>
+<li>此外，通过给另一个参数<code>sizes</code>传值可以修改点大小的分布，传入的可以是dict/list/tuple，传入dict时要求dict内对每种size的值进行mapping，即dict={(sizeValue, size)…..}，而使用list/tuple则需要指定点最大最小值</li>
+</ul>
+<p>可以尝试 <code>sns.relplot(x=&quot;total_bill&quot;, y=&quot;tip&quot;, size=&quot;size&quot;, sizes=(15, 200), data=tips)</code></p>
+<p>下面使用<code>col</code>,<code>row</code>参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"total_bill"</span>, y=<span class="string">"tip"</span>, hue=<span class="string">"smoker"</span>, col=<span class="string">"time"</span>, size=<span class="string">"size"</span>, data=tips)</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_18_1.png" alt="png"></p>
+<ul>
+<li>很容易可以看出，令<code>col = &quot;time&quot;</code>时，会根据”time”值的不同在其他列生成图片。令<code>row = &quot;timw&quot;</code>,则会在不同行生成图片</li>
+</ul>
+<h2 id="用relplot分析连线图"><a href="#用relplot分析连线图" class="headerlink" title="用relplot分析连线图"></a>用relplot分析连线图</h2><p>当我们要仔细的研究数据的变化情况时，连线图就比散点图更加方便</p>
+<p>当然我们可以直接用sns.lineplot()绘制，不过我们依然延续上面的内容，用<code>sns.relplot(kind=&quot;line&quot;.....)</code> 来绘制连线图</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(dict(time=np.arange(<span class="number">500</span>),</span><br><span class="line">                       value=np.random.randn(<span class="number">500</span>).cumsum()))</span><br><span class="line"><span class="comment"># np.cumsum(Array)返回一个和Array同shape的np.darray</span></span><br><span class="line"><span class="comment">#其中第n个元素为Array的前n项和</span></span><br><span class="line">g = sns.relplot(x=<span class="string">"time"</span>, y=<span class="string">"value"</span>, kind=<span class="string">"line"</span>, data=df)</span><br><span class="line">g.fig.autofmt_xdate() <span class="comment"># x轴数值斜体化</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_21_0.png" alt="png"></p>
+<ul>
+<li>我们随机生成了一个dataFrame，横轴为1-500的整数，纵轴为生成随机数的前time项和。值得注意的是，seaborn在处理数据时，会有序的将(x, y)数据对根据 <em>x的大小</em> 进行排列，即默认参数<code>sort=True</code>，如果我们不需要这样的功能，可以置参数为<code>False</code> </li>
+</ul>
+<p>可以尝试下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(np.random.randn(500, 2).cumsum(axis=0), columns=[&quot;x&quot;, &quot;y&quot;])</span><br><span class="line">sns.relplot(x=&quot;x&quot;, y=&quot;y&quot;, sort=False, kind=&quot;line&quot;, data=df)</span><br></pre></td></tr></table></figure>
+<p>有时候当一个x对应多个y值的时候，seaborn会有自己独特地处理方式，我们可以先看下面的代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fmri = sns.load_dataset(<span class="string">"fmri"</span>, cache=<span class="keyword">False</span>)</span><br><span class="line">sns.relplot(x=<span class="string">"timepoint"</span>, y=<span class="string">"signal"</span>, kind=<span class="string">"line"</span>, data=fmri)</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_23_1.png" alt="png"></p>
+<ul>
+<li>可以看出，seaborn将y值的平均值标记了出来，并且绘制出了95%的置信区间。</li>
+<li>若要去去除置信区间的显示，可以令<code>ci=None</code>(ci-&gt;confidence intervals)</li>
+</ul>
+<p><code>sns.relplot(x=&quot;timepoint&quot;, y=&quot;signal&quot;, ci=None, kind=&quot;line&quot;, data=fmri)</code></p>
+<ul>
+<li><p>不同的ci参数的设置可以有不同的效果，具体情况可以查看api</p>
+</li>
+<li><p>如果不需要计算mean值，可以令<code>estimator=None</code>，不过会有奇怪的效果</p>
+</li>
+</ul>
+<hr>
+<p>和散点图一样，我们也可以通过传入hue,style等等参数来在一张图中显示多维度的数据<br>例如下面的语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"timepoint"</span>, y=<span class="string">"signal"</span>, hue=<span class="string">"region"</span>, style=<span class="string">"event"</span>,</span><br><span class="line">            markers=<span class="keyword">True</span>, kind=<span class="string">"line"</span>, data=fmri);</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_25_0.png" alt="png"></p>
+<ul>
+<li>类似的，hue参数改变颜色，style改变线的虚实(若dashes=False,则不会有虚实线的区别)，markers会给图中的点标出</li>
+<li><p>对于连线图而言，将hue与style所指的特征列设置为相同的能使图像看起来更加明晰<br><code>sns.relplot(x=&quot;timepoint&quot;, y=&quot;signal&quot;, hue=&quot;event&quot;, style=&quot;event&quot;,kind=&quot;line&quot;, data=fmri)</code></p>
+</li>
+<li><p>接下来我们介绍一下<code>units</code>这个参数，通过设定它可以在一张图内画出多条直线：令<code>units=&quot;subject&quot;</code>可以根据subject属性的不同画出不同的曲线，即根据subject的值进行取样</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sns.relplot(x=<span class="string">"timepoint"</span>, y=<span class="string">"signal"</span>, hue=<span class="string">"region"</span>,</span><br><span class="line">            units=<span class="string">"subject"</span>, estimator=<span class="keyword">None</span>,</span><br><span class="line">            kind=<span class="string">"line"</span>, data=fmri.query(<span class="string">"event == 'stim'"</span>))</span><br><span class="line"><span class="comment"># pd.query("event == 'stim'")为pd中event属性为'stim'的部分</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_27_1.png" alt="png"></p>
+<ul>
+<li>由于subject属性非常多，所以我们的曲线变得十分的复杂，仅用这个例子介绍units参数的作用</li>
+</ul>
+<p>最后利用pd.data_range()函数来绘出时间数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(dict(time=pd.date_range(<span class="string">"2017-1-1"</span>, periods=<span class="number">500</span>),</span><br><span class="line">                       value=np.random.randn(<span class="number">500</span>).cumsum()))</span><br><span class="line">g = sns.relplot(x=<span class="string">"time"</span>, y=<span class="string">"value"</span>, kind=<span class="string">"line"</span>, data=df)</span><br><span class="line">g.fig.autofmt_xdate()</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/10/02/Try with SeaBorn/output_29_0.png" alt="png"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Visualization/" rel="tag"># Visualization</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/15/CoordConv/" rel="next" title="CoordConv论文笔记">
+                <i class="fa fa-chevron-left"></i> CoordConv论文笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Muxv" />
+            
+              <p class="site-author-name" itemprop="name">Muxv</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题外话"><span class="nav-number">1.</span> <span class="nav-text">题外话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Let’s-Start"><span class="nav-number">2.</span> <span class="nav-text">Let’s Start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用sns-relplot分析散点图"><span class="nav-number">3.</span> <span class="nav-text">用sns.relplot分析散点图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用relplot分析连线图"><span class="nav-number">4.</span> <span class="nav-text">用relplot分析连线图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muxv</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
