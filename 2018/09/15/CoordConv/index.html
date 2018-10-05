@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ai,Deep Learning,Convolution," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="论文名：An intriguing failing of convolutional neural networks 地址：点这里 vvvv 摘要 vvvv    卷积作为当下深度学习中最有效的工具，对于涉及到像素和空间分布的问题（例如普通的坐标变换），表现却会不佳。我们通过引入一种 $CoordConv$ 的改良版卷积来增强对以上问题的处理效果。实验证明，这种 $CoordConv$ 效果不凡。">
+<meta name="keywords" content="ai,Deep Learning,Convolution">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CoordConv论文笔记">
+<meta property="og:url" content="http://yoursite.com/2018/09/15/CoordConv/index.html">
+<meta property="og:site_name" content="Muxv&#39;s Plog">
+<meta property="og:description" content="论文名：An intriguing failing of convolutional neural networks 地址：点这里 vvvv 摘要 vvvv    卷积作为当下深度学习中最有效的工具，对于涉及到像素和空间分布的问题（例如普通的坐标变换），表现却会不佳。我们通过引入一种 $CoordConv$ 的改良版卷积来增强对以上问题的处理效果。实验证明，这种 $CoordConv$ 效果不凡。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/09/15/CoordConv/CoordConv%20Structure.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/15/CoordConv/Coordinate%20Classfication.png">
+<meta property="og:updated_time" content="2018-10-04T06:07:36.152Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CoordConv论文笔记">
+<meta name="twitter:description" content="论文名：An intriguing failing of convolutional neural networks 地址：点这里 vvvv 摘要 vvvv    卷积作为当下深度学习中最有效的工具，对于涉及到像素和空间分布的问题（例如普通的坐标变换），表现却会不佳。我们通过引入一种 $CoordConv$ 的改良版卷积来增强对以上问题的处理效果。实验证明，这种 $CoordConv$ 效果不凡。">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/15/CoordConv/CoordConv%20Structure.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/15/CoordConv/"/>
+
+
+
+
+
+  <title>CoordConv论文笔记 | Muxv's Plog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muxv's Plog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-list"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/15/CoordConv/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muxv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muxv's Plog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CoordConv论文笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-15T20:09:02+08:00">
+                2018-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>论文名：<em>An intriguing failing of convolutional neural networks</em></p>
+<p>地址：<a href="https://arxiv.org/pdf/1807.03247.pdf" target="_blank" rel="noopener">点这里</a></p>
+<center>vvvv 摘要 vvvv </center>
+
+<ul>
+<li>卷积作为当下深度学习中最有效的工具，对于涉及到像素和空间分布的问题（例如普通的坐标变换），表现却会不佳。我们通过引入一种 $CoordConv$ 的改良版卷积来增强对以上问题的处理效果。实验证明，这种 $CoordConv$ 效果不凡。</li>
+</ul>
+<a id="more"></a>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>这篇论文的五大贡献：</p>
+<ol>
+<li><p>设计了数据集 $Not-so-Clevr$ ，为在幕布上随机放置的方形图像</p>
+</li>
+<li><p>设计了 $CoordConv$ ，使filters可以习得他在笛卡尔空间中的位置（通过加入额外一层Channel 包含filter所看见的数据的坐标）</p>
+</li>
+<li><p>先给出两个问题模型：</p>
+<ul>
+<li>$Supervised \space Coordinate \space Classification$ task: 给一个点像素点的位置(x, y) 作为输入，训练CNN来高亮它作为输出</li>
+<li>$Supervised \space Coordinate \space Regression$  task: 给一个包含一个白色像素的图片，输出它的坐标</li>
+</ul>
+<p>经过实验，使用加入CoordConv 层的CNN 在处理这些问题上十分方便，而纯CNN则相对棘手</p>
+</li>
+<li><p>继续引入学习任务:</p>
+<ul>
+<li>$Supervised \space Rendering$  task ：要求网络从$Not-so-Clevr $ 数据集给出的方块的坐标，绘出一个完整的图片(一个$9\times9$的图片)</li>
+</ul>
+<p>类似3，CoordConv在处理这种问题上依然比纯卷积学习能力要强</p>
+</li>
+<li><p>在别的一些模型用 CoordConv 代替卷积层可以增强模型效果。例如GANs，VAEs，Faster-CNN 在使用 CoordConv 都表现出或多或少的优化 </p>
+</li>
+</ol>
+<hr>
+<h3 id="Not-so-Clevr-dataset"><a href="#Not-so-Clevr-dataset" class="headerlink" title="Not-so-Clevr dataset"></a>Not-so-Clevr dataset</h3><ul>
+<li><p>先介绍一下这个数据集：</p>
+<p>在$64 \times 64$ 的幕布上分布有 $9\times 9$ 大小的方块(一张图一个)，且每个方块被限制在整个幕布上，可能的落点有$56 \times 56$ 个($64-9 + 1 = 56$)，所以遍历所有落点，有 $3136$ 样本。对每个方块(样本) $i$ ，数据集包含 3 块内容：</p>
+<ul>
+<li>$C_i \in \mathbb  R^2$ ，$C $ 即 Center(中心)，即方块中心的坐标(x, y)</li>
+<li>$P_i \in \mathbb R^{64\times64}$ ，为在 $64\times64$ 图片上仅仅高亮中心像素的图片</li>
+<li>$I_i \in \mathbb R^{64\times64}$  ，为在$64\times64$ 图片上高亮出$9\times 9$ 方块的图片</li>
+</ul>
+<p>对这3136个数据我们有两种训练/测试集划分方法:</p>
+<ol>
+<li><em>uniform</em> ：从所有可能的中心点位置随机按二八的比例划分，80%为训练集，20%为测试集</li>
+<li><em>quadrant</em>：将整个幕布四等分，在左下角部分的数据为测试集，其余为训练集</li>
+</ol>
+<p>(数据十分简单，仅通过一道两行Python代码利用卷积层即可生成)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">onehots = np.pad(np.eye(<span class="number">3136</span>).reshape((<span class="number">3136</span>, <span class="number">56</span>, <span class="number">56</span>, <span class="number">1</span>)), ((<span class="number">0</span>,<span class="number">0</span>), (<span class="number">4</span>,<span class="number">4</span>), (<span class="number">4</span>,<span class="number">4</span>), (<span class="number">0</span>,<span class="number">0</span>)), <span class="string">"constant"</span>); </span><br><span class="line">images = tf.nn.conv2d(onehots, np.ones((<span class="number">9</span>, <span class="number">9</span>, <span class="number">1</span>, <span class="number">1</span>)), [<span class="number">1</span>]*<span class="number">4</span>, <span class="string">"SAME"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="The-CoordConv-layer"><a href="#The-CoordConv-layer" class="headerlink" title="The CoordConv layer"></a>The CoordConv layer</h3><ul>
+<li><p>原始的卷积层(Convolution layer) 结合了很多优点:    </p>
+<ol>
+<li>相对来说较少的参数</li>
+<li>可以很快的在现代GPUs上运行</li>
+<li>学得的模型具有平移不变性(translation invariance)</li>
+</ol>
+<p>而我们的CoordConv保留了前两个优点，通常认为，舍弃了平移不变性会降低网络泛化的能力，但事实上，在后面的部分中可以看出，将网络的一部分能力分配给处理非平移不变的问题(即没有平移不变性要求) 可以使模型更易训练且有更好的泛化能力</p>
+</li>
+<li><p>CoordConv layer是标准卷积层的一种简单拓展，具体操作为在原feature map后加入两层来代表每一个像素点的坐标($i,j$) ：$i$ 层（$h \times w \times 1$ ）记录了像素的横坐标，矩阵第一行全为 0，第二行为 1以此类推，$j$ 层则记录了纵坐标，大小与 $i$ 层一样，第一列全为 0，第二列全为 1，以此类推。</p>
+</li>
+<li><p>一些细节：</p>
+<ol>
+<li>在实验中我们对坐标$i, j $ 做了线性放缩，限制在$[-1, 1]$内</li>
+<li>对二维卷积，两个坐标已经完全足够精确定位每个像素，不过我们也可以加入第三层 $r $ 层，其中$r=\sqrt{(i-h/2)^2 + (j-w/2)^2}$ </li>
+</ol>
+<p>CoordConv 结构见下图~</p>
+</li>
+</ul>
+<p>  <img src="/2018/09/15/CoordConv/CoordConv Structure.png" alt="CoordConv Structure">以下讨论这样处理的特性：</p>
+<ul>
+<li><strong>参数数量</strong> ：(忽略 $bias$ 的参数数量)原始卷积层的 $weights$ 数量为$c’ck^2$ (kernel size为 $k$, in channels 为 $c$ , out channels 为$c’$)，而对应的CoordConv layer 则包含$(c+d)c’k^2$ 参数( $d$ 为增加的坐标数据层的维数 )，参数数量的增加不是很多，数量还是只要取决于 input channels</li>
+<li><strong>平移不变性 + 与其他模型的关系</strong> ：<ul>
+<li>CoordConv 作为卷积层的一种拓展，也继承了一定的平移不变性的能力：通过置坐标层对应的 filter 权值为 0 ，“退化“为原始的卷积层。而如果这些权重不为 0 ，则模型具有一定的坐标依赖性。这两种CoordConv的模式取决于要处理的问题<ul>
+<li>与不共享权重的Locally connected layers (可以看作不共享权值的卷积层，每个位置都有自己独特的权重值) 相似，CoordConv 具有坐标依赖性，但是相比之下具有更少的参数量：Locally connected layers 有 $hwcc’k^2$  个权重，而CoordConv 仅为$(c+d)c’k^2$ 。 此外，考虑到权值共享（所有位置的像素被同一个权值矩阵处理），CoordConv 的坐标依赖性完全来自于坐标层提供的信息，与filter位置无关。此外，局部连接层无法做到的一点是，对CoordConv 的处理可以超出原始空间范围( 可能是通过padding )，只要能推断出padding 出的位置的相应坐标即可</li>
+</ul>
+</li>
+<li>此外，CoordConv还和CPPNs， 空间attention机制相关，笔者了解不深，此处略去</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Supervised-Coordinate-tasks"><a href="#Supervised-Coordinate-tasks" class="headerlink" title="Supervised Coordinate tasks"></a>Supervised Coordinate tasks</h3><h4 id="1-Supervised-Coordinate-Classification"><a href="#1-Supervised-Coordinate-Classification" class="headerlink" title="1.Supervised Coordinate Classification"></a>1.Supervised Coordinate Classification</h4><p>  <img src="/2018/09/15/CoordConv/Coordinate Classfication.png" alt="SCC Classfication">      </p>
+<ul>
+<li><p>补充一下此任务的相关内容&lt;这是一个多分类问题，每个像素点都是一个类&gt;。作为复杂问题前的热身任务，模型在这个问题上的表现能提前预测负责问题的表现</p>
+</li>
+<li><p>然后看图四的表现，有些令人惊讶，卷积层对 <em>uniform</em> 划分的数据集始终没有最优（最高86%的acc），且对 <em>quadrant</em> 划分的数据完全没有泛化能力。且CoordConv 仅用了10-20就训练完成，原始卷积层则花了将近1小时时间。(且此次实验中CoordConv参数量(7.5k)远小于原始卷积层(200k))</p>
+</li>
+</ul>
+<h4 id="2-Supervised-Coordinate-Regression"><a href="#2-Supervised-Coordinate-Regression" class="headerlink" title="2.Supervised Coordinate Regression"></a>2.Supervised Coordinate Regression</h4><ul>
+<li>一个标准卷积网络( 85k 的参数量 )能够拟合 <em>uniform</em> 数据集且泛化的很好(平均少于半个像素的误差)；然而同样的模型结构在$quadrant$ 数据集上则表现很差。</li>
+<li>一个小型的全卷积网络（12k 的参数量）精调之后可以在 <em>quadrant</em> 数据集上实现有限程度的泛化(平均少于五个像素的误差)，但是在$uniform$ 集上表现很</li>
+<li>一个 900 个参数的CoordConv模型，在单个CoordConv层后面加了数个标准卷积层，在$uniform$ 和 $quadrant$集上都能快速训练和泛化<ul>
+<li>以上结果表明相反的转化模式与坐标-像素转换有相似的问题有待解决</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-Supervised-Rendering"><a href="#3-Supervised-Rendering" class="headerlink" title="3. Supervised Rendering"></a>3. Supervised Rendering</h4><ul>
+<li>同样的，可以鲜明的看出，CoordConv依然完胜原始卷积</li>
+</ul>
+<hr>
+<h3 id="Applicability-to-Image-Classification-Object-Detection-Generative-Modeling-and-Reinforcement-Learning"><a href="#Applicability-to-Image-Classification-Object-Detection-Generative-Modeling-and-Reinforcement-Learning" class="headerlink" title="Applicability to Image Classification, Object Detection, Generative Modeling, and Reinforcement Learning"></a>Applicability to Image Classification, Object Detection, Generative Modeling, and Reinforcement Learning</h3><ul>
+<li>通过将Conv换为 CoordConv 可以优化很多模型：包括 ResNet-50,Faster R-CNN, GANs, VAEs, RL、</li>
+<li>下面阐述使用CoordConv带来的优化效果<ul>
+<li><strong>ImageNet Classification</strong>：加入了额外一个输出为8个channels的CoordConv层，给ResNet-50的Top-5 acc 平均带来了 0.04% 的提高（结果从五次运行模型的结果得到）</li>
+<li><strong>Object Detection</strong>：在对MINST数字的Detection中，使用了CoordConv的R-CNN的IOU提高了24%</li>
+<li><strong>Generative Modeling</strong>：当下的生成模型存在或多或少的模型崩溃(mode Collapse：即模型学习到的概率分布与现实中的存在差距，具体表现为生成的图片表现力差，生成物品稀少，色彩单调，严重时图片之间几乎没有差距)。实验可以看出使用了CoordConv的GAN在很少的参数下还能达到非常好的效果。</li>
+<li><strong>Reinforcement Learning</strong>：加入CoordConv的强化学习在部分游戏里可以有很好的改善，同时对部分游戏也没有效果</li>
+</ul>
+</li>
+</ul>
+<h3 id="Conclusion-and-Future-Work"><a href="#Conclusion-and-Future-Work" class="headerlink" title="Conclusion and Future Work"></a>Conclusion and Future Work</h3><ol>
+<li>CNNs对一些坐标转换问题表现得难以处理</li>
+<li>加入 CoordConv可以在很多应用里提升表现</li>
+<li>在未来我们会对更多的数据集应用CoordConv来对其更深入的评估</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ai/" rel="tag"># ai</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          
+            <a href="/tags/Convolution/" rel="tag"># Convolution</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/16/Start-Reinforcement-Learning/" rel="prev" title="强化学习入门">
+                强化学习入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Muxv" />
+            
+              <p class="site-author-name" itemprop="name">Muxv</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Not-so-Clevr-dataset"><span class="nav-number">2.</span> <span class="nav-text">Not-so-Clevr dataset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-CoordConv-layer"><span class="nav-number">3.</span> <span class="nav-text">The CoordConv layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Supervised-Coordinate-tasks"><span class="nav-number">4.</span> <span class="nav-text">Supervised Coordinate tasks</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Supervised-Coordinate-Classification"><span class="nav-number">4.1.</span> <span class="nav-text">1.Supervised Coordinate Classification</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Supervised-Coordinate-Regression"><span class="nav-number">4.2.</span> <span class="nav-text">2.Supervised Coordinate Regression</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Supervised-Rendering"><span class="nav-number">4.3.</span> <span class="nav-text">3. Supervised Rendering</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Applicability-to-Image-Classification-Object-Detection-Generative-Modeling-and-Reinforcement-Learning"><span class="nav-number">5.</span> <span class="nav-text">Applicability to Image Classification, Object Detection, Generative Modeling, and Reinforcement Learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Conclusion-and-Future-Work"><span class="nav-number">6.</span> <span class="nav-text">Conclusion and Future Work</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muxv</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
